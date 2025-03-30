@@ -1,20 +1,24 @@
-import React,{ useState,useRef }  from 'react';
+import React,{ useState,useRef,useEffect }  from 'react';
 import { Flex, Layout,Upload,Button, Modal } from 'antd';
 
 
 import FileA from './components/FileA'
+import GraphAreaComponent from './components/GraphAreaComponent'
 
 import useDragAndDropHook from './hooks/useDragAndDropHook';
 import useRefreshMermaidGraphHook from './hooks/useRefreshMermaidGraphHook';
 
+
+import MermaidUtil from './utils/MermaidUtil';
 import "./App.css"
+
 
 
 
 const App = () => {
     const [curFilePath, setCurFilePath] = useState('');
     const [error, setError] = useState('');
-    const mermaidContainerRef = useRef(null);
+
     const jsonContentRef = useRef(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     
@@ -22,7 +26,7 @@ const App = () => {
     //使用自定义 Hook 处理拖放文件事件
     useDragAndDropHook(setCurFilePath);
     //使用自定义Hook更新mermaid图形事件
-    useRefreshMermaidGraphHook(curFilePath,mermaidContainerRef,jsonContentRef);
+    useRefreshMermaidGraphHook(curFilePath,jsonContentRef);
    
     // 打开模态窗口的函数
     const showModal = () => {
@@ -50,6 +54,7 @@ const App = () => {
     jsonContent=jsonContent["Start1"];
     
 
+    
     return (
         <div className="App">
             <Layout>
@@ -59,15 +64,11 @@ const App = () => {
 
                 <Layout.Content>
                     <p>{curFilePath}</p>
-                    <div className="display-area" ref={mermaidContainerRef}>
-                        { (!mermaidContainerRef.current || mermaidContainerRef.current.innerHTML == "") &&(
-                            <p>点击或拖动 .mmd 文件到此区域上传</p>
-                        )}
-                    </div>
+                    <GraphAreaComponent   curFilePath={curFilePath}>
+                      
+                    </GraphAreaComponent>
 
-                    <FileA href="./mermaid_test2.mmd" referFilePath={curFilePath} setCurFilePath={setCurFilePath}  >
-                            mermaid_test2
-                    </FileA>
+                 
                     
                     <Button type="primary" onClick={showModal}>
                         打开模态窗口
@@ -80,13 +81,30 @@ const App = () => {
                     >
                         <div>
                             <h3>Props 列表</h3>
-                            <ul>
-                                {
-                                    jsonContent && jsonContent.Attrs && Object.keys(jsonContent.Attrs).forEach(keyName =>(
-                                        <li key={keyName}> {jsonContent.Attrs[keyName]} </li>
-                                    ))
-                                }
-                            </ul>
+                           
+                            {
+                                jsonContent && jsonContent.Attrs && (
+                                    <table className="table-with-border"> 
+                                        <thead>
+                                            <tr>
+                                                <th>Key</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Object.keys(jsonContent.Attrs).map(keyName => (
+                                                <tr key={keyName}>
+                                                    <td>{keyName}</td>
+                                                    <td>{jsonContent.Attrs[keyName]}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                    
+                                    
+                                )
+                            }
+                        
                             <h3>Links</h3>
                             <ul>
                                 {jsonContent && jsonContent.Links && jsonContent.Links.map((link, index) => (

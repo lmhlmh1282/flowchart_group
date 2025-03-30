@@ -1,15 +1,10 @@
 import { useEffect ,useCallback} from 'react';
 import MermaidUtil from '../utils/MermaidUtil';
-const useRefreshMermaidGraphHook = (curFilePath,mermaidContainerRef,jsonContentRef) => {
-    const mermaidUtil = new MermaidUtil();
+const useRefreshMermaidGraphHook = (curFilePath,jsonContentRef) => {
 
     const refreshMermaidGraph= useCallback(async() => {
-        //1.更新流程图
-        mermaidUtil.genMermaidChart(curFilePath).then((svgCode)=>{
-            mermaidContainerRef.current.innerHTML= svgCode;
-        });  
-
-
+       
+    
         //2.读取对应的json
         const pathAPI =window.electronAPI.pathAPI;
         // 获取文件名（包括后缀）
@@ -35,19 +30,25 @@ const useRefreshMermaidGraphHook = (curFilePath,mermaidContainerRef,jsonContentR
         
 
         //console.log("jsonContentRef: "+jsonContentRef);
-        
+
     } ,[curFilePath, jsonContentRef]);
+
+
+
     
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (event.key === 'F5') {
                 event.preventDefault(); // 阻止默认的 F5 刷新行为
                 refreshMermaidGraph();
+                
+                
             }
         };
 
         // 添加键盘事件监听器
         window.addEventListener('keydown', handleKeyDown);
+       
 
         // 清理事件监听器
         return () => {

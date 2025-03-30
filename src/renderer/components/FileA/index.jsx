@@ -36,7 +36,7 @@ export default class FileA extends React.Component {
         const children=this.props.children;
        
         return (
-            <a href={href} onClick={this.onClick}>{children}</a>
+            <a   href={href} onClick={this.onClick}>{children}</a>
         );
     }      
 }

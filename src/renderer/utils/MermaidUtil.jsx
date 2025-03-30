@@ -1,5 +1,5 @@
 import mermaid from 'mermaid';
-
+import * as d3 from 'd3';
 
 export default class MermaidUtil {
     constructor() {
@@ -8,24 +8,49 @@ export default class MermaidUtil {
             startOnLoad: false,
             theme: 'default'
         });
+
+        this.name="mermaidChart"
     }
 
+    showNodeData=(nodeElement)=>{
+        const node_text = nodeElement.select('.nodeLabel').text();
+        alert(node_text);
+    }
+
+    bindListeners=()=>{
+         // 使用 D3.js 添加点击事件
+        const select_str='#'+this.name;
+
+        const nodes = d3.select(select_str).selectAll('.node'); 
+        
+        nodes.on('click', function(event, d) {
+            const node_text = d3.select(this).select('.nodeLabel').text();
+            alert(node_text);
+         });
+       
+    }
 
     genMermaidChart = async (filePath) => {
         let retSvgCode="";
-        try {
-           
-            //console.log("filePath: "+filePath);
-            let curFileContent= await window.electronAPI.mainFileProc.loadFile(filePath)
-            //console.log("curFileContent: "+curFileContent);
-            const svgObj= await mermaid.render('mermaidChart', curFileContent);
-            retSvgCode=svgObj.svg;
-            
-            //console.log("mermaidContainerRef.current: "+mermaidContainerRef.current);
-        } catch (err) {
-            console.error(err);
+        if(""!=filePath)
+        {
+          
+            try {
+               
+                //console.log("filePath: "+filePath);
+                let curFileContent= await window.electronAPI.mainFileProc.loadFile(filePath)
+                //console.log("curFileContent: "+curFileContent);
+                const svgObj= await mermaid.render( this.name, curFileContent);
+                retSvgCode=svgObj.svg;
+    
+                
+                //console.log("mermaidContainerRef.current: "+mermaidContainerRef.current);
+            } catch (err) {
+                console.error(err);
+            }
+    
         }
-
+       
         return retSvgCode;
     };
 
