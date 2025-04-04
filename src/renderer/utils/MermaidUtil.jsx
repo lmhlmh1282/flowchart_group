@@ -29,7 +29,8 @@ export default class MermaidUtil {
            
             let outData={
                 ButtonName:ButtonName
-            }
+            };
+            
             functionHandler(outData);
          });
        

@@ -1,22 +1,26 @@
-import React,{Fragment, useEffect, useState} from 'react';
+import React,{Fragment, useEffect, useState,useRef, use} from 'react';
 import { Layout } from 'antd';
 import mermaid from 'mermaid';
-
-
 
 
 import MermaidUtil from '../../utils/MermaidUtil';
 import ModalContentWindow from './ModalContentWindow';
 import useRefreshMermaidGraphHook from '../../hooks/useRefreshMermaidGraphHook';
 
+import "./index.css"
+
 const mermaidUtil=new MermaidUtil();
+
+
 function GraphAreaComponent (props) {
     const [svgCode,setSvgCode] = useState("");
     const [isModalVisible,setIsModalVisible]=useState(false);
     const [modalWindowData,setModalWindowData]=useState({});
 
-
+   
+    
     const [jsonContent,setJsonContent] = useState({});
+
 
 
     //使用自定义Hook更新mermaid图形事件
@@ -41,6 +45,7 @@ function GraphAreaComponent (props) {
         refreshMermaidGraph();
 
     },[props.curFilePath]);
+
 
     useEffect(() => {
         // 在 svgCode 更新后绑定事件监听器

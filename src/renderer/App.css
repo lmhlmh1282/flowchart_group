@@ -59,18 +59,3 @@ display-area{
 }
 
 
-/* 添加表格边框样式 */
-.table-with-border {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table-with-border th, .table-with-border td {
-    border: 1px solid #000;
-    padding: 8px;
-    text-align: left;
-}
-
-.table-with-border th {
-    background-color: #f2f2f2;
-}
