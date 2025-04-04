@@ -1,6 +1,6 @@
 import { useEffect ,useCallback} from 'react';
 import MermaidUtil from '../utils/MermaidUtil';
-const useRefreshMermaidGraphHook = (curFilePath,jsonContentRef) => {
+const useRefreshMermaidGraphHook = (curFilePath,setJsonContent) => {
 
     const refreshMermaidGraph= useCallback(async() => {
        
@@ -20,18 +20,18 @@ const useRefreshMermaidGraphHook = (curFilePath,jsonContentRef) => {
         try{
             if("" != jsonContentStr && null != jsonContentStr)
             {
-                jsonContentRef.current=JSON.parse(jsonContentStr);
+                setJsonContent(JSON.parse(jsonContentStr));
             }
             
         }catch (error) {
             console.error('Parsing error:', error); // 处理解析错误
-            jsonContentRef.current={};
+            setJsonContent({});
         };
         
 
         //console.log("jsonContentRef: "+jsonContentRef);
 
-    } ,[curFilePath, jsonContentRef]);
+    } ,[curFilePath]);
 
 
 
@@ -41,8 +41,6 @@ const useRefreshMermaidGraphHook = (curFilePath,jsonContentRef) => {
             if (event.key === 'F5') {
                 event.preventDefault(); // 阻止默认的 F5 刷新行为
                 refreshMermaidGraph();
-                
-                
             }
         };
 

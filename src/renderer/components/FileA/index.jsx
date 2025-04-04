@@ -3,12 +3,13 @@ import { Layout } from 'antd';
 import PropTypes from 'prop-types';
 
 export default class FileA extends React.Component {
+
     handleChangeFilePath=(event)=>
     {
         event.preventDefault();
         const srcFilePath=event.target.attributes["href"].nodeValue;
         const pathAPI =window.electronAPI.pathAPI;
-        const curFilePath=this.props.referFilePath;
+        const curFilePath=this.props.curFilePath;
         const dstFilePath=pathAPI.join(pathAPI.dirname(curFilePath),srcFilePath);
         //console.log("dstFilePath ",dstFilePath);
 
@@ -40,3 +41,18 @@ export default class FileA extends React.Component {
         );
     }      
 }
+
+
+// 声明 props 的类型
+FileA.propTypes = {
+    href: PropTypes.string.isRequired,
+    children: PropTypes.node.isRequired,
+    curFilePath: PropTypes.string.isRequired,
+    setCurFilePath: PropTypes.func.isRequired,
+    otherClickEvents: PropTypes.arrayOf(PropTypes.func)
+};
+
+// 声明 props 的默认值
+FileA.defaultProps = {
+    otherClickEvents: []
+};

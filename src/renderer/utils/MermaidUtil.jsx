@@ -17,18 +17,34 @@ export default class MermaidUtil {
         alert(node_text);
     }
 
-    bindListeners=()=>{
+    bindListeners=(data,functionHandler)=>{
+        
          // 使用 D3.js 添加点击事件
         const select_str='#'+this.name;
 
         const nodes = d3.select(select_str).selectAll('.node'); 
         
         nodes.on('click', function(event, d) {
-            const node_text = d3.select(this).select('.nodeLabel').text();
-            alert(node_text);
+            const ButtonName = d3.select(this).select('.nodeLabel').text();
+           
+            let outData={
+                ButtonName:ButtonName
+            }
+            functionHandler(outData);
          });
        
     }
+
+
+    unbindListeners=()=>{
+        // 使用 D3.js 添加点击事件
+       const select_str='#'+this.name;
+
+       const nodes = d3.select(select_str).selectAll('.node'); 
+       
+       nodes.on('click', null);
+      
+   }
 
     genMermaidChart = async (filePath) => {
         let retSvgCode="";
