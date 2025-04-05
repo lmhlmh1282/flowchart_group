@@ -3,3 +3,18 @@ svg{
 }
 
 
+.file-input{
+    border: 1px;
+}
+.display-area{
+    height: 100%; /* 确保 display-area 有足够的高度 */
+    width: 100%; /* 确保 display-area 有足够的宽度 */
+}
+.display-area-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* 确保 display-area 有足够的高度 */
+    width: 100%; /* 确保 display-area 有足够的宽度 */
+}
+

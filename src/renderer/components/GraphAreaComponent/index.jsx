@@ -1,5 +1,5 @@
 import React,{Fragment, useEffect, useState} from 'react';
-import { Layout } from 'antd';
+import { Layout,Button } from 'antd';
 import mermaid from 'mermaid';
 
 
@@ -34,7 +34,15 @@ function GraphAreaComponent (props) {
     useRefreshMermaidGraphHook(props.curFilePath,svgCode,setSvgCode,isModalVisible,setIsModalVisible,setModalWindowData,updateState,setUpdateState,jsonFilePath);
    
 
-
+    // 处理文件选择事件
+    const handleFileSelect = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const filePath = window.electronAPI.getPathForFile(file);
+            //console.log('Selected file:', filePath); // 
+            props.setCurFilePath(filePath);
+        }
+    };
         
     return (
         <Fragment>
@@ -47,7 +55,17 @@ function GraphAreaComponent (props) {
              <div className="display-area" >  
                 { 
                     (!svgCode || svgCode == "") &&(
-                        <p>点击或拖动 .mmd 文件到此区域上传</p>
+                        <div className='display-area-content'>
+                            <Button onClick={() => document.getElementById('file-input').click()}>选择文件或拖拽.mmd文件</Button>
+                            <input
+                                id="file-input"
+                                type="file"
+                                accept=".mmd"
+                                style={{ display: 'none' }}
+                                onChange={handleFileSelect}
+                                className='file-input'
+                            />
+                        </div>
                     )
                 }
                 {
