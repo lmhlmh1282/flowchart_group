@@ -23,7 +23,7 @@ const useDragAndDropHook = (setCurFilePath) => {
 
         document.addEventListener('dragenter', preventDrag);
         document.addEventListener('dragover', preventDrag);
-        document.addEventListener('drop', preventDrag);
+        document.addEventListener('drop', onDrop);
 
         return () => {
             document.addEventListener('dragenter', preventDrag);

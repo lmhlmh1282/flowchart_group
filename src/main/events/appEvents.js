@@ -1,4 +1,4 @@
-module.exports = function (app) {
+const handleAppEvents =  (app) => {
     app.on('activate', function () {
         if (BrowserWindow.getAllWindows().length === 0) {
             createWindow();
@@ -15,4 +15,6 @@ module.exports = function (app) {
             app.quit();
         }
     });
-};    
+};   
+
+export default handleAppEvents;

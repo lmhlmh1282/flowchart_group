@@ -1,10 +1,13 @@
-module.exports = function (ipcMain) {
+
+import fs from 'fs';
+import { dialog } from 'electron';
+const handleIpcFile =  (ipcMain) => {
 
     //文件事件处理
     ipcMain.handle('load-file', async (event, filePath) => {
         
         //读取文件，发送到渲染进程
-        const fs = require('fs');
+        
       
         try {
             if(fs.existsSync(filePath))
@@ -25,7 +28,7 @@ module.exports = function (ipcMain) {
 
     //打开文件对话框
     ipcMain.handle('open-file-dialog', async () => {
-        const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+        const { canceled, filePaths } = await dialog.showOpenDialog(ipcMain.mainWindow, {
             properties: ['openFile'],
             filters: [
                 { name: 'MMD Files', extensions: ['mmd'] }
@@ -37,3 +40,6 @@ module.exports = function (ipcMain) {
         return null;
     });
  };    
+
+
+ export default handleIpcFile;

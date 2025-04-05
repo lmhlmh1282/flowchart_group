@@ -1,9 +1,8 @@
-const { contextBridge, ipcRenderer } =require('electron');
-const { webUtils } = require('electron') ;
-const path = require('path') ;
+import { contextBridge, ipcRenderer } from 'electron';
+import { webUtils } from 'electron';
+import  path  from 'path' ;
 
-
-const mainFileProc = require(path.join(__dirname,'./mainFileProc.cjs'));
+import mainFileProc from './mainFileProc.mjs';
 
 contextBridge.exposeInMainWorld('electronAPI', {
     openFileDialog: () => ipcRenderer.invoke('open-file-dialog'),

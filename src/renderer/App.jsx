@@ -22,7 +22,7 @@ const App = () => {
    
     //使用自定义 Hook 处理拖放文件事件
     useDragAndDropHook(setCurFilePath);
-
+    
 
     //处理缩放问题
     const handleResize=()=>{
