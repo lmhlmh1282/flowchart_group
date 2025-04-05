@@ -25,7 +25,6 @@ function createWindow(){
     
     let mainUrl = isDev ? 'http://localhost:3001' : `file://${urlFile}`;
     //mainUrl=`file://${urlFile}`;
-    console.log(mainUrl);
     mainWindow.loadURL(mainUrl);
 
 }
