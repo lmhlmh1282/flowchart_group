@@ -19,12 +19,12 @@
       "output": "build"
     },
     "files": [
-        "dist/*",
-        "dist/**/*",
-        "src/main/*",
-        "src/main/**/*",
-        "src/preload/*",
-        "package.json"
+      "dist/*",
+      "dist/**/*",
+      "src/main/*",
+      "src/main/**/*",
+      "src/preload/*",
+      "package.json"
     ],
     "win": {
       "target": [
@@ -49,6 +49,7 @@
     "antd": "^5.24.5",
     "concurrently": "^9.1.2",
     "electron-is-dev": "^3.0.1",
+    "electron-log": "^5.3.3",
     "mermaid": "^11.6.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

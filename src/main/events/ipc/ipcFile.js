@@ -1,19 +1,18 @@
 
 import fs from 'fs';
 import { dialog } from 'electron';
+import logger from "../../logger.js"
 const handleIpcFile =  (ipcMain) => {
 
     //文件事件处理
     ipcMain.handle('load-file', async (event, filePath) => {
         
         //读取文件，发送到渲染进程
-        
-      
         try {
             if(fs.existsSync(filePath))
             {
                 const fileContent = fs.readFileSync(filePath,'utf-8');
-                console.log('load-file',filePath);
+                logger.debug('load-file',filePath);
                 return fileContent;
             }
            

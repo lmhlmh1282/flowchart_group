@@ -21,8 +21,8 @@ function createWindow(){
             preload:path.join(path.dirname(__dirname),'preload/preload.mjs')
         }
     });
-    const urlFile=path.join(__dirname,"../../dist/index.html");
     
+    const urlFile=path.join(__dirname,"../../dist/index.html");
     let mainUrl = isDev ? 'http://localhost:3001' : `file://${urlFile}`;
     mainWindow.loadURL(mainUrl);
 
