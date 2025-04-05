@@ -2,25 +2,39 @@ import { useEffect ,useCallback} from 'react';
 import MermaidUtil from '../utils/MermaidUtil';
 
 const mermaidUtil=new MermaidUtil();
-const useRefreshMermaidGraphHook = (curFilePath,svgCode,setSvgCode,isModalVisible,setIsModalVisible,setModalWindowData,updateState,setUpdateState) => {
+const useRefreshMermaidGraphHook = (curFilePath,svgCode,setSvgCode,isModalVisible,setIsModalVisible,setModalWindowData,updateState,setUpdateState,jsonFilePath) => {
 
 
 
     useEffect(() => {
+       
         // 在 svgCode 更新后绑定事件监听器
         if (svgCode) {
-            mermaidUtil.bindListeners({},async (outData)=>{      
-                const pathAPI=window.electronAPI.pathAPI; 
-                const buttonName= outData.ButtonName;
+            const pathAPI=window.electronAPI.pathAPI; 
+            //去掉后缀
+            const baseName = pathAPI.basename(curFilePath, pathAPI.extname(curFilePath));
+            const subDirPath = pathAPI.join(pathAPI.dirname(curFilePath),baseName);
+          
 
+            mermaidUtil.bindListeners({},async (outData)=>{      
+               
+                const buttonName= outData.ButtonName;
                 let modalDataFilepath="";
-                if(curFilePath){
-                    const baseName = pathAPI.basename(curFilePath, pathAPI.extname(curFilePath));
-                    const dirPath = pathAPI.join(pathAPI.dirname(curFilePath),baseName);
-                    modalDataFilepath=pathAPI.join(dirPath,buttonName+".md");
+                //读取config
+                const configContent=await mermaidUtil.fetchData(jsonFilePath);
+
+                //如果configContent有相应的FileName字段，就取字段对应的文件
+                //否则就用buttonName来合成文件名
+                if(""!=subDirPath){
+                    let subName=buttonName+".md"
+                    if(configContent[buttonName] && configContent[buttonName].FileName){
+                        subName=configContent[buttonName].FileName;
+                    }
+                    
+                    modalDataFilepath=pathAPI.join(subDirPath,subName);
+                    //alert("modalDataFilepath: "+modalDataFilepath);
                 }
                 
-
                 //get modalWindowData
                 const modalWindowData=await window.electronAPI.mainFileProc.loadFile(modalDataFilepath);
                 //console.log("modalWindowData: "+modalWindowData);
@@ -29,6 +43,13 @@ const useRefreshMermaidGraphHook = (curFilePath,svgCode,setSvgCode,isModalVisibl
                     setModalWindowData(modalWindowData);
                 }
             });
+
+            //从文件来设置颜色
+            if(!isModalVisible)
+            {
+                mermaidUtil.setColorFromJsonFile(jsonFilePath);
+            }
+           
         }
 
         return () => {

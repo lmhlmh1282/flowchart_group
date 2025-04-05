@@ -15,11 +15,23 @@ function GraphAreaComponent (props) {
     const [isModalVisible,setIsModalVisible]=useState(false);
     const [modalWindowData,setModalWindowData]=useState({});
     const [updateState,setUpdateState] =useState(0);
+    const [jsonFilePath,setJsonFilePath]=useState("");
 
    
-    
+    useEffect(() => {
+        //找到文件，读取对应的json数据
+        const pathAPI=window.electronAPI.pathAPI; 
+        //去掉后缀
+        const baseName = pathAPI.basename(props.curFilePath, pathAPI.extname(props.curFilePath));
+        const subDirPath = pathAPI.join(pathAPI.dirname(props.curFilePath),baseName);
+        //json文件
+        const configFilePath = pathAPI.join(subDirPath, 'config.json');
+        setJsonFilePath(configFilePath);
+    },[props.curFilePath]);
+
+
     //使用自定义Hook更新mermaid图形事件
-    useRefreshMermaidGraphHook(props.curFilePath,svgCode,setSvgCode,isModalVisible,setIsModalVisible,setModalWindowData,updateState,setUpdateState);
+    useRefreshMermaidGraphHook(props.curFilePath,svgCode,setSvgCode,isModalVisible,setIsModalVisible,setModalWindowData,updateState,setUpdateState,jsonFilePath);
    
 
 
