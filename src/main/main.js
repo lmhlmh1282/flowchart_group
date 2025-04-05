@@ -24,7 +24,6 @@ function createWindow(){
     const urlFile=path.join(__dirname,"../../dist/index.html");
     
     let mainUrl = isDev ? 'http://localhost:3001' : `file://${urlFile}`;
-    //mainUrl=`file://${urlFile}`;
     mainWindow.loadURL(mainUrl);
 
 }
