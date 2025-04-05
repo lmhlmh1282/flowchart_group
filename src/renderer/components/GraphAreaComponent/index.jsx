@@ -70,7 +70,7 @@ function GraphAreaComponent (props) {
                 }
                 {
                     (svgCode && svgCode != "") &&(
-                        <div dangerouslySetInnerHTML={{ __html: svgCode }} />
+                            <div className='display-area-content' dangerouslySetInnerHTML={{ __html: svgCode }} />
                     )
                 }
             </div>

@@ -1,4 +1,4 @@
-import React,{ useState,useRef,useEffect }  from 'react';
+import React,{ useState,useRef,useEffect, Fragment }  from 'react';
 import { Flex, Layout,Upload,Button, Modal } from 'antd';
 
 
@@ -6,8 +6,7 @@ import { Flex, Layout,Upload,Button, Modal } from 'antd';
 import GraphAreaComponent from './components/GraphAreaComponent'
 
 import useDragAndDropHook from './hooks/useDragAndDropHook';
-
-
+import useCustomTitle from './hooks/useCustomTitle';
 
 import MermaidUtil from './utils/MermaidUtil';
 import "./App.css"
@@ -22,7 +21,7 @@ const App = () => {
    
     //使用自定义 Hook 处理拖放文件事件
     useDragAndDropHook(setCurFilePath);
-    
+    useCustomTitle(curFilePath);
 
     //处理缩放问题
     const handleResize=()=>{
@@ -47,8 +46,6 @@ const App = () => {
                 </Layout.Header>
 
                 <Layout.Content>
-                    <p>{curFilePath}</p>
-
                     <GraphAreaComponent   curFilePath={curFilePath} setCurFilePath={setCurFilePath}>                      
                     </GraphAreaComponent>
 
