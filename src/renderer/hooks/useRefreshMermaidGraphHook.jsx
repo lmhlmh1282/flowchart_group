@@ -1,46 +1,62 @@
 import { useEffect ,useCallback} from 'react';
 import MermaidUtil from '../utils/MermaidUtil';
-const useRefreshMermaidGraphHook = (curFilePath,setJsonContent) => {
 
-    const refreshMermaidGraph= useCallback(async() => {
-       
-    
-        //2.读取对应的json
-        const pathAPI =window.electronAPI.pathAPI;
-        // 获取文件名（包括后缀）
-        const fileNameWithExt = pathAPI.basename(curFilePath);
-        // 获取文件扩展名
-        const fileExt = pathAPI.extname(curFilePath);
-        const fileNameWithoutExt = pathAPI.basename(fileNameWithExt, fileExt);
-        //console.log("fileNameWithoutExt: "+fileNameWithoutExt);
-        const jsonfileBasename=fileNameWithoutExt+".json";
-        const jsonFilePath=pathAPI.join(pathAPI.dirname(curFilePath),jsonfileBasename);
-        
-        const jsonContentStr=await window.electronAPI.mainFileProc.loadFile(jsonFilePath);
-        try{
-            if("" != jsonContentStr && null != jsonContentStr)
-            {
-                setJsonContent(JSON.parse(jsonContentStr));
-            }
-            
-        }catch (error) {
-            console.error('Parsing error:', error); // 处理解析错误
-            setJsonContent({});
+const mermaidUtil=new MermaidUtil();
+const useRefreshMermaidGraphHook = (curFilePath,svgCode,setSvgCode,isModalVisible,setIsModalVisible,setModalWindowData,updateState,setUpdateState) => {
+
+
+
+    useEffect(() => {
+        // 在 svgCode 更新后绑定事件监听器
+        if (svgCode) {
+            mermaidUtil.bindListeners({},async (outData)=>{      
+                const pathAPI=window.electronAPI.pathAPI; 
+                const buttonName= outData.ButtonName;
+
+                let modalDataFilepath="";
+                if(curFilePath){
+                    const baseName = pathAPI.basename(curFilePath, pathAPI.extname(curFilePath));
+                    const dirPath = pathAPI.join(pathAPI.dirname(curFilePath),baseName);
+                    modalDataFilepath=pathAPI.join(dirPath,buttonName+".md");
+                }
+                
+
+                //get modalWindowData
+                const modalWindowData=await window.electronAPI.mainFileProc.loadFile(modalDataFilepath);
+                //console.log("modalWindowData: "+modalWindowData);
+                if(modalWindowData){
+                    setIsModalVisible(true);
+                    setModalWindowData(modalWindowData);
+                }
+            });
+        }
+
+        return () => {
+            mermaidUtil.unbindListeners();
         };
-        
-
-        //console.log("jsonContentRef: "+jsonContentRef);
-
-    } ,[curFilePath]);
-
-
-
+    }, 
+    [svgCode,isModalVisible,updateState]);
     
+    const refreshMermaidGraph=async() => {
+            //1.更新流程图
+            mermaidUtil.genMermaidChart(curFilePath).then((newSvgCode)=>{
+                //console.log(curFilePath);
+               // console.log("svgCode: "+newSvgCode);
+                setSvgCode(newSvgCode);
+                setUpdateState(updateState=>{return (updateState+1)%1000;});
+                
+            }); 
+            
+            //console.log("jsonContentRef: "+jsonContentRef);
+    
+    } ;
+ 
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (event.key === 'F5') {
                 event.preventDefault(); // 阻止默认的 F5 刷新行为
                 refreshMermaidGraph();
+                //alert('F5 刷新');
             }
         };
 
@@ -52,7 +68,7 @@ const useRefreshMermaidGraphHook = (curFilePath,setJsonContent) => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [refreshMermaidGraph]); 
+    }); 
 
 
     useEffect(() => {
