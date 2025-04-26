@@ -1,7 +1,7 @@
 {
   "name": "flowchart_group",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "src/main/main.js",
   "scripts": {
@@ -14,7 +14,7 @@
   },
   "build": {
     "appId": "com.example.flowchartgroup",
-    "productName": "Flowchart Group",
+    "productName": "Flowchart_Group",
     "directories": {
       "output": "build"
     },
@@ -46,6 +46,7 @@
     }
   },
   "dependencies": {
+    "@rollup/rollup-win32-x64-msvc": "^4.40.0",
     "antd": "^5.24.5",
     "concurrently": "^9.1.2",
     "electron-is-dev": "^3.0.1",
