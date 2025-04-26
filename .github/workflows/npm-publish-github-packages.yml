@@ -28,8 +28,10 @@ jobs:
     - name: Install dependencies
       run: npm install
  
-    - name: Rebuild native modules for Electron
+    - name: Build React
       run: npm run vbuild 
  
     - name: Build Electron app
       run: npm run build 
+      env:
+       ELECTRON_TOKEN: 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
