@@ -33,5 +33,3 @@ jobs:
  
     - name: Build Electron app
       run: npm run build 
-      env:
-       ELECTRON_TOKEN: ${{ secrets.TEST_BUILD }}
